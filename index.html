@@ -21,23 +21,17 @@
   <link rel="icon" type="image/png" sizes="16x16" href="assets/img/favicon-16x16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png">
 
-  <!-- Preload da Imagem Hero (Essencial para máxima pontuação LCP) -->
+  <!-- Preload da Imagem Hero (LCP crítico) -->
   <link rel="preload" as="image" href="assets/img/hero.webp" type="image/webp" fetchpriority="high">
 
-  <!-- Google Fonts: Otimizado e Não-bloqueante (display=swap) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <!-- Google Fonts: preconnect e carregamento assíncrono sem bloquear renderização -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap" media="print" onload="this.media='all'">
-  <noscript>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap">
-  </noscript>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap"></noscript>
 
-  <!-- CSS de Produção Compilado e Minificado (Elimina ~3MB de JS do Tailwind Play CDN) -->
+  <!-- CSS de Produção -->
   <link rel="stylesheet" href="assets/css/style.min.css">
-
-  <!-- Alpine.js via CDN com defer (Menu mobile e FAQ interativo) -->
-  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
   <!-- ================================================ -->
   <!-- JSON-LD Schemas: SEO Estruturado                  -->
@@ -297,7 +291,7 @@
   <!-- ========================================== -->
   <!-- HEADER / MENU FIXO (STICKY) COM NAVEGAÇÃO -->
   <!-- ========================================== -->
-  <header x-data="{ mobileMenuOpen: false }" class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-brand-sandBorder/70 shadow-sm transition-all duration-300">
+  <header id="site-header" class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-brand-sandBorder/70 shadow-sm transition-all duration-300">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-20">
         
@@ -341,12 +335,12 @@
 
         <!-- Mobile Hamburger Button (Alpine.js) -->
         <div class="flex lg:hidden">
-          <button @click="mobileMenuOpen = !mobileMenuOpen" type="button" class="inline-flex items-center justify-center p-2.5 rounded-xl text-brand-text hover:text-brand-sageDark hover:bg-brand-sageLight focus:outline-none focus:ring-2 focus:ring-brand-sage" aria-expanded="false" :aria-expanded="mobileMenuOpen">
+          <button id="menu-toggle" type="button" onclick="toggleMenu()" class="inline-flex items-center justify-center p-2.5 rounded-xl text-brand-text hover:text-brand-sageDark hover:bg-brand-sageLight focus:outline-none focus:ring-2 focus:ring-brand-sage" aria-expanded="false" aria-controls="mobile-menu">
             <span class="sr-only">Abrir menu</span>
-            <svg x-show="!mobileMenuOpen" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <svg id="icon-open" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
             </svg>
-            <svg x-show="mobileMenuOpen" x-cloak class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <svg id="icon-close" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
@@ -355,20 +349,20 @@
       </div>
     </div>
 
-    <!-- Mobile Menu Panel (Alpine.js) -->
-    <div x-show="mobileMenuOpen" x-cloak @click.away="mobileMenuOpen = false" class="lg:hidden bg-white/98 backdrop-blur-lg border-b border-brand-sandBorder px-4 pt-3 pb-6 space-y-2 shadow-xl">
-      <a @click="mobileMenuOpen = false" href="#hero" class="block px-3 py-2.5 rounded-xl text-base font-medium text-brand-text hover:bg-brand-sageLight hover:text-brand-sageDark transition-colors">Início</a>
-      <a @click="mobileMenuOpen = false" href="#credibilidade" class="block px-3 py-2.5 rounded-xl text-base font-medium text-brand-text hover:bg-brand-sageLight hover:text-brand-sageDark transition-colors">Credibilidade</a>
-      <a @click="mobileMenuOpen = false" href="#sobre" class="block px-3 py-2.5 rounded-xl text-base font-medium text-brand-text hover:bg-brand-sageLight hover:text-brand-sageDark transition-colors">Quem Somos</a>
-      <a @click="mobileMenuOpen = false" href="#servicos" class="block px-3 py-2.5 rounded-xl text-base font-medium text-brand-text hover:bg-brand-sageLight hover:text-brand-sageDark transition-colors">Serviços</a>
-      <a @click="mobileMenuOpen = false" href="#beneficios" class="block px-3 py-2.5 rounded-xl text-base font-medium text-brand-text hover:bg-brand-sageLight hover:text-brand-sageDark transition-colors">Benefícios</a>
-      <a @click="mobileMenuOpen = false" href="#como-funciona" class="block px-3 py-2.5 rounded-xl text-base font-medium text-brand-text hover:bg-brand-sageLight hover:text-brand-sageDark transition-colors">Como Funciona</a>
-      <a @click="mobileMenuOpen = false" href="#depoimentos" class="block px-3 py-2.5 rounded-xl text-base font-medium text-brand-text hover:bg-brand-sageLight hover:text-brand-sageDark transition-colors">Confiança</a>
-      <a @click="mobileMenuOpen = false" href="#area-atuacao" class="block px-3 py-2.5 rounded-xl text-base font-medium text-brand-text hover:bg-brand-sageLight hover:text-brand-sageDark transition-colors">Área de Atuação</a>
-      <a @click="mobileMenuOpen = false" href="#faq" class="block px-3 py-2.5 rounded-xl text-base font-medium text-brand-text hover:bg-brand-sageLight hover:text-brand-sageDark transition-colors">FAQ</a>
-      <a @click="mobileMenuOpen = false" href="#contato" class="block px-3 py-2.5 rounded-xl text-base font-medium text-brand-text hover:bg-brand-sageLight hover:text-brand-sageDark transition-colors">Contato</a>
+    <!-- Mobile Menu Panel -->
+    <div id="mobile-menu" class="hidden lg:hidden bg-white/98 backdrop-blur-lg border-b border-brand-sandBorder px-4 pt-3 pb-6 space-y-2 shadow-xl">
+      <a onclick="closeMenu()" href="#hero" class="block px-3 py-2.5 rounded-xl text-base font-medium text-brand-text hover:bg-brand-sageLight hover:text-brand-sageDark transition-colors">Início</a>
+      <a onclick="closeMenu()" href="#credibilidade" class="block px-3 py-2.5 rounded-xl text-base font-medium text-brand-text hover:bg-brand-sageLight hover:text-brand-sageDark transition-colors">Credibilidade</a>
+      <a onclick="closeMenu()" href="#sobre" class="block px-3 py-2.5 rounded-xl text-base font-medium text-brand-text hover:bg-brand-sageLight hover:text-brand-sageDark transition-colors">Quem Somos</a>
+      <a onclick="closeMenu()" href="#servicos" class="block px-3 py-2.5 rounded-xl text-base font-medium text-brand-text hover:bg-brand-sageLight hover:text-brand-sageDark transition-colors">Serviços</a>
+      <a onclick="closeMenu()" href="#beneficios" class="block px-3 py-2.5 rounded-xl text-base font-medium text-brand-text hover:bg-brand-sageLight hover:text-brand-sageDark transition-colors">Benefícios</a>
+      <a onclick="closeMenu()" href="#como-funciona" class="block px-3 py-2.5 rounded-xl text-base font-medium text-brand-text hover:bg-brand-sageLight hover:text-brand-sageDark transition-colors">Como Funciona</a>
+      <a onclick="closeMenu()" href="#depoimentos" class="block px-3 py-2.5 rounded-xl text-base font-medium text-brand-text hover:bg-brand-sageLight hover:text-brand-sageDark transition-colors">Confiança</a>
+      <a onclick="closeMenu()" href="#area-atuacao" class="block px-3 py-2.5 rounded-xl text-base font-medium text-brand-text hover:bg-brand-sageLight hover:text-brand-sageDark transition-colors">Área de Atuação</a>
+      <a onclick="closeMenu()" href="#faq" class="block px-3 py-2.5 rounded-xl text-base font-medium text-brand-text hover:bg-brand-sageLight hover:text-brand-sageDark transition-colors">FAQ</a>
+      <a onclick="closeMenu()" href="#contato" class="block px-3 py-2.5 rounded-xl text-base font-medium text-brand-text hover:bg-brand-sageLight hover:text-brand-sageDark transition-colors">Contato</a>
       <div class="pt-2">
-        <a @click="mobileMenuOpen = false" href="https://wa.me/5585998765432?text=Ol%C3%A1%2C%20gostaria%20de%20agendar%20um%20hor%C3%A1rio%20para%20atendimento%20psicol%C3%B3gico" target="_blank" rel="noopener noreferrer" class="w-full flex items-center justify-center gap-2.5 bg-gradient-to-r from-brand-sageDeep to-brand-sage hover:from-brand-sageDark hover:to-brand-sageDark text-white py-3.5 rounded-xl font-semibold shadow-glow-sage transition-all">
+        <a onclick="closeMenu()" href="https://wa.me/5585998765432?text=Ol%C3%A1%2C%20gostaria%20de%20agendar%20um%20hor%C3%A1rio%20para%20atendimento%20psicol%C3%B3gico" target="_blank" rel="noopener noreferrer" class="w-full flex items-center justify-center gap-2.5 bg-gradient-to-r from-brand-sageDeep to-brand-sage hover:from-brand-sageDark hover:to-brand-sageDark text-white py-3.5 rounded-xl font-semibold shadow-glow-sage transition-all">
           <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.301-.15-1.78-.878-2.056-.979-.275-.1-.476-.15-.676.15-.2.301-.776.979-.952 1.18-.175.2-.35.226-.651.076-.301-.15-1.272-.469-2.423-1.497-.896-.799-1.501-1.787-1.677-2.088-.176-.301-.019-.464.132-.614.136-.135.301-.351.452-.527.15-.175.2-.301.3-.501.1-.2.05-.376-.025-.526-.075-.15-.677-1.631-.927-2.233-.244-.587-.492-.508-.677-.517l-.577-.01c-.2 0-.527.075-.802.376-.276.301-1.053 1.028-1.053 2.508 0 1.48 1.078 2.909 1.229 3.109.15.2 2.122 3.24 5.141 4.544.718.31 1.279.496 1.716.635.722.23 1.378.198 1.9.12.58-.088 1.78-.727 2.03-1.43.25-.702.25-1.304.175-1.43-.075-.125-.275-.201-.576-.351z"/><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2.05 21.608a.75.75 0 00.942.942l4.44-1.388A9.96 9.96 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm-8.5 10c0-4.687 3.813-8.5 8.5-8.5s8.5 3.813 8.5 8.5-3.813 8.5-8.5 8.5a8.46 8.46 0 01-4.304-1.173.75.75 0 00-.547-.078l-3.327 1.04 1.04-3.327a.75.75 0 00-.078-.547A8.46 8.46 0 013.5 12z" clip-rule="evenodd"/></svg>
           <span>Agendar pelo WhatsApp</span>
         </a>
@@ -1085,137 +1079,87 @@
           </h2>
         </div>
 
-        <!-- Alpine.js Accordion com transições cromáticas sofisticadas -->
-        <div x-data="{ active: null }" class="space-y-4">
-          
-          <!-- Accordion 1 -->
-          <div class="bg-white rounded-[16px] border-2 transition-all duration-200 overflow-hidden shadow-sm" :class="active === 1 ? 'border-brand-sage shadow-card-hover' : 'border-brand-sandBorder/70 hover:border-brand-sand'">
-            <button @click="active = (active === 1 ? null : 1)" type="button" class="w-full px-6 py-5 text-left flex items-center justify-between gap-4 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brand-sage">
-              <span class="font-serif text-base sm:text-lg font-bold text-brand-text" :class="active === 1 ? 'text-brand-sageDeep' : ''">Quanto custa uma sessão com psicólogo em Fortaleza?</span>
-              <span class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300" :class="active === 1 ? 'rotate-180 bg-brand-sage text-white shadow-glow-sage' : 'bg-brand-canvas text-brand-muted'">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
-              </span>
+        <!-- FAQ Accordion (Vanilla JS) -->
+        <div id="faq-accordion" class="space-y-4">
+
+          <div class="faq-item bg-white rounded-[16px] border-2 border-brand-sandBorder/70 transition-all duration-200 overflow-hidden shadow-sm">
+            <button type="button" class="faq-btn w-full px-6 py-5 text-left flex items-center justify-between gap-4 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brand-sage">
+              <span class="faq-q font-serif text-base sm:text-lg font-bold text-brand-text">Quanto custa uma sessão com psicólogo em Fortaleza?</span>
+              <span class="faq-icon w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300 bg-brand-canvas text-brand-muted"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg></span>
             </button>
-            <div x-show="active === 1" x-collapse x-cloak class="px-6 pb-6 pt-1 text-brand-muted text-sm sm:text-base leading-relaxed border-t border-brand-sageLight bg-brand-sageLight/20">
-              Os honorários do atendimento são informados diretamente durante o contato pelo WhatsApp. Você pode enviar uma mensagem para consultar as informações sobre o atendimento antes de agendar.
-            </div>
+            <div class="faq-answer hidden px-6 pb-6 pt-1 text-brand-muted text-sm sm:text-base leading-relaxed border-t border-brand-sageLight bg-brand-sageLight/20">Os honorários do atendimento são informados diretamente durante o contato pelo WhatsApp. Você pode enviar uma mensagem para consultar as informações sobre o atendimento antes de agendar.</div>
           </div>
 
-          <!-- Accordion 2 -->
-          <div class="bg-white rounded-[16px] border-2 transition-all duration-200 overflow-hidden shadow-sm" :class="active === 2 ? 'border-brand-sage shadow-card-hover' : 'border-brand-sandBorder/70 hover:border-brand-sand'">
-            <button @click="active = (active === 2 ? null : 2)" type="button" class="w-full px-6 py-5 text-left flex items-center justify-between gap-4 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brand-sage">
-              <span class="font-serif text-base sm:text-lg font-bold text-brand-text" :class="active === 2 ? 'text-brand-sageDeep' : ''">Onde fica o consultório do psicólogo na Aldeota?</span>
-              <span class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300" :class="active === 2 ? 'rotate-180 bg-brand-sage text-white shadow-glow-sage' : 'bg-brand-canvas text-brand-muted'">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
-              </span>
+          <div class="faq-item bg-white rounded-[16px] border-2 border-brand-sandBorder/70 transition-all duration-200 overflow-hidden shadow-sm">
+            <button type="button" class="faq-btn w-full px-6 py-5 text-left flex items-center justify-between gap-4 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brand-sage">
+              <span class="faq-q font-serif text-base sm:text-lg font-bold text-brand-text">Onde fica o consultório do psicólogo na Aldeota?</span>
+              <span class="faq-icon w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300 bg-brand-canvas text-brand-muted"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg></span>
             </button>
-            <div x-show="active === 2" x-collapse x-cloak class="px-6 pb-6 pt-1 text-brand-muted text-sm sm:text-base leading-relaxed border-t border-brand-sageLight bg-brand-sageLight/20">
-              O atendimento presencial acontece na Av. Santos Dumont, 2450, Sala 608, Aldeota, Fortaleza - CE. A localização possui acesso facilitado para quem está na Aldeota e em bairros próximos.
-            </div>
+            <div class="faq-answer hidden px-6 pb-6 pt-1 text-brand-muted text-sm sm:text-base leading-relaxed border-t border-brand-sageLight bg-brand-sageLight/20">O atendimento presencial acontece na Av. Santos Dumont, 2450, Sala 608, Aldeota, Fortaleza - CE. A localização possui acesso facilitado para quem está na Aldeota e em bairros próximos.</div>
           </div>
 
-          <!-- Accordion 3 -->
-          <div class="bg-white rounded-[16px] border-2 transition-all duration-200 overflow-hidden shadow-sm" :class="active === 3 ? 'border-brand-sage shadow-card-hover' : 'border-brand-sandBorder/70 hover:border-brand-sand'">
-            <button @click="active = (active === 3 ? null : 3)" type="button" class="w-full px-6 py-5 text-left flex items-center justify-between gap-4 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brand-sage">
-              <span class="font-serif text-base sm:text-lg font-bold text-brand-text" :class="active === 3 ? 'text-brand-sageDeep' : ''">Qual é o horário de atendimento?</span>
-              <span class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300" :class="active === 3 ? 'rotate-180 bg-brand-sage text-white shadow-glow-sage' : 'bg-brand-canvas text-brand-muted'">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
-              </span>
+          <div class="faq-item bg-white rounded-[16px] border-2 border-brand-sandBorder/70 transition-all duration-200 overflow-hidden shadow-sm">
+            <button type="button" class="faq-btn w-full px-6 py-5 text-left flex items-center justify-between gap-4 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brand-sage">
+              <span class="faq-q font-serif text-base sm:text-lg font-bold text-brand-text">Qual é o horário de atendimento?</span>
+              <span class="faq-icon w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300 bg-brand-canvas text-brand-muted"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg></span>
             </button>
-            <div x-show="active === 3" x-collapse x-cloak class="px-6 pb-6 pt-1 text-brand-muted text-sm sm:text-base leading-relaxed border-t border-brand-sageLight bg-brand-sageLight/20">
-              Os atendimentos acontecem de segunda a sexta-feira, das 08:00 às 19:00. A disponibilidade de horários pode ser consultada pelo WhatsApp.
-            </div>
+            <div class="faq-answer hidden px-6 pb-6 pt-1 text-brand-muted text-sm sm:text-base leading-relaxed border-t border-brand-sageLight bg-brand-sageLight/20">Os atendimentos acontecem de segunda a sexta-feira, das 08:00 às 19:00. A disponibilidade de horários pode ser consultada pelo WhatsApp.</div>
           </div>
 
-          <!-- Accordion 4 -->
-          <div class="bg-white rounded-[16px] border-2 transition-all duration-200 overflow-hidden shadow-sm" :class="active === 4 ? 'border-brand-sage shadow-card-hover' : 'border-brand-sandBorder/70 hover:border-brand-sand'">
-            <button @click="active = (active === 4 ? null : 4)" type="button" class="w-full px-6 py-5 text-left flex items-center justify-between gap-4 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brand-sage">
-              <span class="font-serif text-base sm:text-lg font-bold text-brand-text" :class="active === 4 ? 'text-brand-sageDeep' : ''">Quais são as formas de pagamento?</span>
-              <span class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300" :class="active === 4 ? 'rotate-180 bg-brand-sage text-white shadow-glow-sage' : 'bg-brand-canvas text-brand-muted'">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
-              </span>
+          <div class="faq-item bg-white rounded-[16px] border-2 border-brand-sandBorder/70 transition-all duration-200 overflow-hidden shadow-sm">
+            <button type="button" class="faq-btn w-full px-6 py-5 text-left flex items-center justify-between gap-4 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brand-sage">
+              <span class="faq-q font-serif text-base sm:text-lg font-bold text-brand-text">Quais são as formas de pagamento?</span>
+              <span class="faq-icon w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300 bg-brand-canvas text-brand-muted"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg></span>
             </button>
-            <div x-show="active === 4" x-collapse x-cloak class="px-6 pb-6 pt-1 text-brand-muted text-sm sm:text-base leading-relaxed border-t border-brand-sageLight bg-brand-sageLight/20">
-              As formas de pagamento disponíveis são informadas no momento do agendamento. Entre em contato pelo WhatsApp para consultar as opções atuais.
-            </div>
+            <div class="faq-answer hidden px-6 pb-6 pt-1 text-brand-muted text-sm sm:text-base leading-relaxed border-t border-brand-sageLight bg-brand-sageLight/20">As formas de pagamento disponíveis são informadas no momento do agendamento. Entre em contato pelo WhatsApp para consultar as opções atuais.</div>
           </div>
 
-          <!-- Accordion 5 -->
-          <div class="bg-white rounded-[16px] border-2 transition-all duration-200 overflow-hidden shadow-sm" :class="active === 5 ? 'border-brand-sage shadow-card-hover' : 'border-brand-sandBorder/70 hover:border-brand-sand'">
-            <button @click="active = (active === 5 ? null : 5)" type="button" class="w-full px-6 py-5 text-left flex items-center justify-between gap-4 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brand-sage">
-              <span class="font-serif text-base sm:text-lg font-bold text-brand-text" :class="active === 5 ? 'text-brand-sageDeep' : ''">Como agendar uma consulta com psicólogo em Fortaleza?</span>
-              <span class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300" :class="active === 5 ? 'rotate-180 bg-brand-sage text-white shadow-glow-sage' : 'bg-brand-canvas text-brand-muted'">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
-              </span>
+          <div class="faq-item bg-white rounded-[16px] border-2 border-brand-sandBorder/70 transition-all duration-200 overflow-hidden shadow-sm">
+            <button type="button" class="faq-btn w-full px-6 py-5 text-left flex items-center justify-between gap-4 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brand-sage">
+              <span class="faq-q font-serif text-base sm:text-lg font-bold text-brand-text">Como agendar uma consulta com psicólogo em Fortaleza?</span>
+              <span class="faq-icon w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300 bg-brand-canvas text-brand-muted"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg></span>
             </button>
-            <div x-show="active === 5" x-collapse x-cloak class="px-6 pb-6 pt-1 text-brand-muted text-sm sm:text-base leading-relaxed border-t border-brand-sageLight bg-brand-sageLight/20">
-              O agendamento é feito diretamente pelo WhatsApp. Basta enviar uma mensagem para verificar os horários disponíveis e escolher entre atendimento presencial ou online.
-            </div>
+            <div class="faq-answer hidden px-6 pb-6 pt-1 text-brand-muted text-sm sm:text-base leading-relaxed border-t border-brand-sageLight bg-brand-sageLight/20">O agendamento é feito diretamente pelo WhatsApp. Basta enviar uma mensagem para verificar os horários disponíveis e escolher entre atendimento presencial ou online.</div>
           </div>
 
-          <!-- Accordion 6 -->
-          <div class="bg-white rounded-[16px] border-2 transition-all duration-200 overflow-hidden shadow-sm" :class="active === 6 ? 'border-brand-sage shadow-card-hover' : 'border-brand-sandBorder/70 hover:border-brand-sand'">
-            <button @click="active = (active === 6 ? null : 6)" type="button" class="w-full px-6 py-5 text-left flex items-center justify-between gap-4 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brand-sage">
-              <span class="font-serif text-base sm:text-lg font-bold text-brand-text" :class="active === 6 ? 'text-brand-sageDeep' : ''">Como funciona a primeira sessão de psicoterapia?</span>
-              <span class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300" :class="active === 6 ? 'rotate-180 bg-brand-sage text-white shadow-glow-sage' : 'bg-brand-canvas text-brand-muted'">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
-              </span>
+          <div class="faq-item bg-white rounded-[16px] border-2 border-brand-sandBorder/70 transition-all duration-200 overflow-hidden shadow-sm">
+            <button type="button" class="faq-btn w-full px-6 py-5 text-left flex items-center justify-between gap-4 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brand-sage">
+              <span class="faq-q font-serif text-base sm:text-lg font-bold text-brand-text">Como funciona a primeira sessão de psicoterapia?</span>
+              <span class="faq-icon w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300 bg-brand-canvas text-brand-muted"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg></span>
             </button>
-            <div x-show="active === 6" x-collapse x-cloak class="px-6 pb-6 pt-1 text-brand-muted text-sm sm:text-base leading-relaxed border-t border-brand-sageLight bg-brand-sageLight/20">
-              A primeira sessão permite conversar sobre o motivo que levou você a procurar acompanhamento e compreender melhor suas necessidades. Também é um momento para conhecer como funciona o processo psicoterapêutico.
-            </div>
+            <div class="faq-answer hidden px-6 pb-6 pt-1 text-brand-muted text-sm sm:text-base leading-relaxed border-t border-brand-sageLight bg-brand-sageLight/20">A primeira sessão permite conversar sobre o motivo que levou você a procurar acompanhamento e compreender melhor suas necessidades. Também é um momento para conhecer como funciona o processo psicoterapêutico.</div>
           </div>
 
-          <!-- Accordion 7 -->
-          <div class="bg-white rounded-[16px] border-2 transition-all duration-200 overflow-hidden shadow-sm" :class="active === 7 ? 'border-brand-sage shadow-card-hover' : 'border-brand-sandBorder/70 hover:border-brand-sand'">
-            <button @click="active = (active === 7 ? null : 7)" type="button" class="w-full px-6 py-5 text-left flex items-center justify-between gap-4 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brand-sage">
-              <span class="font-serif text-base sm:text-lg font-bold text-brand-text" :class="active === 7 ? 'text-brand-sageDeep' : ''">Psicólogo pode ajudar em casos de ansiedade e estresse?</span>
-              <span class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300" :class="active === 7 ? 'rotate-180 bg-brand-sage text-white shadow-glow-sage' : 'bg-brand-canvas text-brand-muted'">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
-              </span>
+          <div class="faq-item bg-white rounded-[16px] border-2 border-brand-sandBorder/70 transition-all duration-200 overflow-hidden shadow-sm">
+            <button type="button" class="faq-btn w-full px-6 py-5 text-left flex items-center justify-between gap-4 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brand-sage">
+              <span class="faq-q font-serif text-base sm:text-lg font-bold text-brand-text">Psicólogo pode ajudar em casos de ansiedade e estresse?</span>
+              <span class="faq-icon w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300 bg-brand-canvas text-brand-muted"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg></span>
             </button>
-            <div x-show="active === 7" x-collapse x-cloak class="px-6 pb-6 pt-1 text-brand-muted text-sm sm:text-base leading-relaxed border-t border-brand-sageLight bg-brand-sageLight/20">
-              A psicoterapia pode oferecer um espaço para compreender como ansiedade, preocupações e estresse aparecem na sua rotina e trabalhar essas experiências durante o acompanhamento. Cada caso é avaliado individualmente.
-            </div>
+            <div class="faq-answer hidden px-6 pb-6 pt-1 text-brand-muted text-sm sm:text-base leading-relaxed border-t border-brand-sageLight bg-brand-sageLight/20">A psicoterapia pode oferecer um espaço para compreender como ansiedade, preocupações e estresse aparecem na sua rotina e trabalhar essas experiências durante o acompanhamento. Cada caso é avaliado individualmente.</div>
           </div>
 
-          <!-- Accordion 8 -->
-          <div class="bg-white rounded-[16px] border-2 transition-all duration-200 overflow-hidden shadow-sm" :class="active === 8 ? 'border-brand-sage shadow-card-hover' : 'border-brand-sandBorder/70 hover:border-brand-sand'">
-            <button @click="active = (active === 8 ? null : 8)" type="button" class="w-full px-6 py-5 text-left flex items-center justify-between gap-4 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brand-sage">
-              <span class="font-serif text-base sm:text-lg font-bold text-brand-text" :class="active === 8 ? 'text-brand-sageDeep' : ''">Como funciona o atendimento psicológico online?</span>
-              <span class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300" :class="active === 8 ? 'rotate-180 bg-brand-sage text-white shadow-glow-sage' : 'bg-brand-canvas text-brand-muted'">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
-              </span>
+          <div class="faq-item bg-white rounded-[16px] border-2 border-brand-sandBorder/70 transition-all duration-200 overflow-hidden shadow-sm">
+            <button type="button" class="faq-btn w-full px-6 py-5 text-left flex items-center justify-between gap-4 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brand-sage">
+              <span class="faq-q font-serif text-base sm:text-lg font-bold text-brand-text">Como funciona o atendimento psicológico online?</span>
+              <span class="faq-icon w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300 bg-brand-canvas text-brand-muted"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg></span>
             </button>
-            <div x-show="active === 8" x-collapse x-cloak class="px-6 pb-6 pt-1 text-brand-muted text-sm sm:text-base leading-relaxed border-t border-brand-sageLight bg-brand-sageLight/20">
-              As sessões acontecem por videochamada, permitindo realizar o acompanhamento sem precisar se deslocar até o consultório. É importante estar em um ambiente reservado e com privacidade durante a sessão.
-            </div>
+            <div class="faq-answer hidden px-6 pb-6 pt-1 text-brand-muted text-sm sm:text-base leading-relaxed border-t border-brand-sageLight bg-brand-sageLight/20">As sessões acontecem por videochamada, permitindo realizar o acompanhamento sem precisar se deslocar até o consultório. É importante estar em um ambiente reservado e com privacidade durante a sessão.</div>
           </div>
 
-          <!-- Accordion 9 -->
-          <div class="bg-white rounded-[16px] border-2 transition-all duration-200 overflow-hidden shadow-sm" :class="active === 9 ? 'border-brand-sage shadow-card-hover' : 'border-brand-sandBorder/70 hover:border-brand-sand'">
-            <button @click="active = (active === 9 ? null : 9)" type="button" class="w-full px-6 py-5 text-left flex items-center justify-between gap-4 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brand-sage">
-              <span class="font-serif text-base sm:text-lg font-bold text-brand-text" :class="active === 9 ? 'text-brand-sageDeep' : ''">O atendimento psicológico é confidencial?</span>
-              <span class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300" :class="active === 9 ? 'rotate-180 bg-brand-sage text-white shadow-glow-sage' : 'bg-brand-canvas text-brand-muted'">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
-              </span>
+          <div class="faq-item bg-white rounded-[16px] border-2 border-brand-sandBorder/70 transition-all duration-200 overflow-hidden shadow-sm">
+            <button type="button" class="faq-btn w-full px-6 py-5 text-left flex items-center justify-between gap-4 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brand-sage">
+              <span class="faq-q font-serif text-base sm:text-lg font-bold text-brand-text">O atendimento psicológico é confidencial?</span>
+              <span class="faq-icon w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300 bg-brand-canvas text-brand-muted"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg></span>
             </button>
-            <div x-show="active === 9" x-collapse x-cloak class="px-6 pb-6 pt-1 text-brand-muted text-sm sm:text-base leading-relaxed border-t border-brand-sageLight bg-brand-sageLight/20">
-              O sigilo profissional é um princípio fundamental da atuação em Psicologia, observadas as situações previstas pelas normas profissionais aplicáveis. Isso contribui para criar um ambiente de confiança e segurança durante o acompanhamento.
-            </div>
+            <div class="faq-answer hidden px-6 pb-6 pt-1 text-brand-muted text-sm sm:text-base leading-relaxed border-t border-brand-sageLight bg-brand-sageLight/20">O sigilo profissional é um princípio fundamental da atuação em Psicologia, observadas as situações previstas pelas normas profissionais aplicáveis. Isso contribui para criar um ambiente de confiança e segurança durante o acompanhamento.</div>
           </div>
 
-          <!-- Accordion 10 -->
-          <div class="bg-white rounded-[16px] border-2 transition-all duration-200 overflow-hidden shadow-sm" :class="active === 10 ? 'border-brand-sage shadow-card-hover' : 'border-brand-sandBorder/70 hover:border-brand-sand'">
-            <button @click="active = (active === 10 ? null : 10)" type="button" class="w-full px-6 py-5 text-left flex items-center justify-between gap-4 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brand-sage">
-              <span class="font-serif text-base sm:text-lg font-bold text-brand-text" :class="active === 10 ? 'text-brand-sageDeep' : ''">Qual é o diferencial do atendimento?</span>
-              <span class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300" :class="active === 10 ? 'rotate-180 bg-brand-sage text-white shadow-glow-sage' : 'bg-brand-canvas text-brand-muted'">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
-              </span>
+          <div class="faq-item bg-white rounded-[16px] border-2 border-brand-sandBorder/70 transition-all duration-200 overflow-hidden shadow-sm">
+            <button type="button" class="faq-btn w-full px-6 py-5 text-left flex items-center justify-between gap-4 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brand-sage">
+              <span class="faq-q font-serif text-base sm:text-lg font-bold text-brand-text">Qual é o diferencial do atendimento?</span>
+              <span class="faq-icon w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300 bg-brand-canvas text-brand-muted"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg></span>
             </button>
-            <div x-show="active === 10" x-collapse x-cloak class="px-6 pb-6 pt-1 text-brand-muted text-sm sm:text-base leading-relaxed border-t border-brand-sageLight bg-brand-sageLight/20">
-              A proposta é oferecer um acompanhamento individualizado, com comunicação clara, acolhimento e respeito às particularidades de cada pessoa. Há opção de atendimento presencial na Aldeota e atendimento online.
-            </div>
+            <div class="faq-answer hidden px-6 pb-6 pt-1 text-brand-muted text-sm sm:text-base leading-relaxed border-t border-brand-sageLight bg-brand-sageLight/20">A proposta é oferecer um acompanhamento individualizado, com comunicação clara, acolhimento e respeito às particularidades de cada pessoa. Há opção de atendimento presencial na Aldeota e atendimento online.</div>
           </div>
 
         </div>
@@ -1394,6 +1338,62 @@
       Falar no WhatsApp
     </span>
   </a>
+
+  <script>
+    // Menu Mobile
+    function toggleMenu() {
+      var m = document.getElementById('mobile-menu');
+      var btn = document.getElementById('menu-toggle');
+      var io = document.getElementById('icon-open');
+      var ic = document.getElementById('icon-close');
+      var open = m.classList.toggle('hidden');
+      btn.setAttribute('aria-expanded', open ? 'false' : 'true');
+      io.classList.toggle('hidden');
+      ic.classList.toggle('hidden');
+    }
+    function closeMenu() {
+      var m = document.getElementById('mobile-menu');
+      var btn = document.getElementById('menu-toggle');
+      var io = document.getElementById('icon-open');
+      var ic = document.getElementById('icon-close');
+      m.classList.add('hidden');
+      btn.setAttribute('aria-expanded', 'false');
+      io.classList.remove('hidden');
+      ic.classList.add('hidden');
+    }
+    document.addEventListener('click', function(e) {
+      var header = document.getElementById('site-header');
+      if (!header.contains(e.target)) closeMenu();
+    });
+
+    // FAQ Accordion
+    document.querySelectorAll('.faq-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var item = btn.closest('.faq-item');
+        var ans = item.querySelector('.faq-answer');
+        var icon = btn.querySelector('.faq-icon');
+        var q = btn.querySelector('.faq-q');
+        var isOpen = !ans.classList.contains('hidden');
+        // Fecha todos
+        document.querySelectorAll('.faq-item').forEach(function(i) {
+          i.querySelector('.faq-answer').classList.add('hidden');
+          i.querySelector('.faq-icon').classList.remove('rotate-180','bg-brand-sage','text-white','shadow-glow-sage');
+          i.querySelector('.faq-icon').classList.add('bg-brand-canvas','text-brand-muted');
+          i.querySelector('.faq-q').classList.remove('text-brand-sageDeep');
+          i.classList.remove('border-brand-sage','shadow-card-hover');
+          i.classList.add('border-brand-sandBorder/70');
+        });
+        if (!isOpen) {
+          ans.classList.remove('hidden');
+          icon.classList.add('rotate-180','bg-brand-sage','text-white','shadow-glow-sage');
+          icon.classList.remove('bg-brand-canvas','text-brand-muted');
+          q.classList.add('text-brand-sageDeep');
+          item.classList.add('border-brand-sage','shadow-card-hover');
+          item.classList.remove('border-brand-sandBorder/70');
+        }
+      });
+    });
+  </script>
 
 </body>
 </html>
